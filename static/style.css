@@ -81,7 +81,7 @@ a:hover { text-shadow: 0 0 8px var(--neon); }
 .form .hint { color: #555; font-size: 12px; margin-top: 6px; }
 .result { margin-top: 14px; color: var(--ok); }
 
-.chat { border: 1px solid #1f1f1f); background: var(--void-2); padding: 16px; border-radius: 2px; }
+.chat { border: 1px solid #1f1f1f; background: var(--void-2); padding: 16px; border-radius: 2px; }
 .chat-log { min-height: 260px; max-height: 420px; overflow-y: auto; margin-bottom: 12px; }
 .msg { margin: 10px 0; padding: 10px; border-left: 2px solid #2a2a2a; }
 .msg.user { color: var(--neon); border-color: var(--neon-dim); }
@@ -93,6 +93,10 @@ a:hover { text-shadow: 0 0 8px var(--neon); }
   padding: 10px 12px; font-family: inherit;
 }
 .status { color: #555; font-size: 12px; margin-top: 10px; letter-spacing: 1px; }
+
+.wallet-wrap { display: inline-flex; align-items: center; gap: 10px; margin-left: 18px; }
+.wallet-addr { color: var(--neon); font-size: 12px; letter-spacing: 1px; }
+.btn.wallet { padding: 8px 12px; font-size: 12px; }
 
 footer { padding: 28px 0; text-align: center; border-top: 1px solid #111; color: #444; font-size: 12px; letter-spacing: 1px; margin-top: 24px; }
 footer strong { color: var(--neon); }

@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CREATE AGENT — kimilabs</title>
 <link rel="stylesheet" href="/static/style.css">
+<script src="https://cdn.jsdelivr.net/npm/ethers@6.13.4/dist/ethers.umd.min.js"></script>
+<script src="/static/wallet.js" defer></script>
 </head>
 <body>
 <div class="terminal">
@@ -16,6 +18,10 @@
         <a href="/">[agents]</a>
         <a href="/create">[create]</a>
         <a href="/docs">[docs]</a>
+        <span class="wallet-wrap">
+          <button class="btn wallet" onclick="connectWallet()" data-wallet="action">[connect wallet]</button>
+          <span class="wallet-addr" data-wallet="addr"></span>
+        </span>
       </div>
     </nav>
 
@@ -56,12 +62,14 @@
 
 <script>
 async function submitCreate(){
+  const sender = (typeof connected === 'string') ? connected : null;
   const payload = {
     name: document.getElementById('name').value,
     persona: document.getElementById('persona').value,
     hidden_word: document.getElementById('hidden_word').value,
     creator: document.getElementById('creator').value,
     deposit: document.getElementById('deposit').value || '0',
+    sender: sender,
   };
   const res = await fetch('/api/agent/create', {
     method: 'POST',

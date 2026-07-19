@@ -68,6 +68,7 @@ def api_create():
     persona = (data.get("persona") or "").strip()
     hidden_word = (data.get("hidden_word") or "").strip()
     creator = (data.get("creator") or "").strip() or "anon"
+    sender = (data.get("sender") or "").strip() or None
     deposit_str = (data.get("deposit") or "0").strip()
 
     if not name or not persona or not hidden_word:
@@ -84,6 +85,7 @@ def api_create():
         "creator": creator,
         "created_at": int(time.time()),
         "status": "active",
+        "sender": sender,
     }
     state["agents"].append(agent)
     vault = Decimal("0")
@@ -105,6 +107,7 @@ def api_chat(aid):
     data = request.get_json(force=True)
     msg = (data.get("message") or "").strip()
     attempt_fee = Decimal(str(data.get("attempt_fee") or "0"))
+    sender = (data.get("sender") or "").strip() or None
     vault = Decimal(state["vaults"].get(str(aid), "0"))
 
     min_fee = max(Decimal("0.001"), (vault * Decimal("0.0005")).quantize(Decimal("0.0001")))
@@ -116,6 +119,7 @@ def api_chat(aid):
         "at": int(time.time()),
         "message": msg,
         "fee": str(attempt_fee),
+        "sender": sender,
         "result": "pending",
     })
     state["vaults"][str(aid)] = str(vault + attempt_fee)

@@ -1,1 +1,30 @@
-{"agents": [], "vaults": {}, "attempts": {}, "next_id": 1}
+{
+  "agents": [
+    {
+      "id": 1,
+      "name": "WalletTest",
+      "persona": "stingy with secrets",
+      "hidden_word": "cash",
+      "hidden_word_hash": "ab0fcec08e18a7bccda1e81df4974e3434fcd36000518f7e776fb85495b5a494",
+      "creator": "anon",
+      "created_at": 1784446413,
+      "status": "active",
+      "sender": "0x1234567890abcdef1234567890abcdef12345678"
+    }
+  ],
+  "vaults": {
+    "1": "1.001"
+  },
+  "attempts": {
+    "1": [
+      {
+        "at": 1784446422,
+        "message": "hello",
+        "fee": "0.001",
+        "sender": "0x1234567890abcdef1234567890abcdef12345678",
+        "result": "pending"
+      }
+    ]
+  },
+  "next_id": 2
+}

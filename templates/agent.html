@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{{ agent.name }} — kimilabs</title>
 <link rel="stylesheet" href="/static/style.css">
+<script src="https://cdn.jsdelivr.net/npm/ethers@6.13.4/dist/ethers.umd.min.js"></script>
+<script src="/static/wallet.js" defer></script>
 </head>
 <body>
 <div class="terminal">
@@ -16,6 +18,10 @@
         <a href="/">[agents]</a>
         <a href="/create">[create]</a>
         <a href="/docs">[docs]</a>
+        <span class="wallet-wrap">
+          <button class="btn wallet" onclick="connectWallet()" data-wallet="action">[connect wallet]</button>
+          <span class="wallet-addr" data-wallet="addr"></span>
+        </span>
       </div>
     </nav>
 
@@ -53,9 +59,10 @@ async function send(){
   const status = document.getElementById('status');
   status.textContent = 'processing...';
   try {
+    const sender = (typeof connected === 'string') ? connected : null;
     const res = await fetch('/api/agent/'+agentId+'/chat', {
       method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({message: msg, attempt_fee: fee})
+      body: JSON.stringify({message: msg, attempt_fee: fee, sender: sender})
     });
     const data = await res.json();
     log.innerHTML += '<div class="msg agent">'+(data.cracked ? '<span class="cracked">[CRACKED] </span>': '')+esc(data.reply)+'</div>';
