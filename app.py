@@ -349,13 +349,18 @@ def api_chat(aid):
     state["vaults"][str(aid)] = str(vault + attempt_fee)
     save(state)
 
-    llm_base = os.environ.get("KIMILABS_LLM_BASE_URL", "").strip()
-    llm_key = os.environ.get("KIMILABS_LLM_API_KEY", "").strip()
-    llm_model = os.environ.get("KIMILABS_LLM_MODEL", "").strip()
-    if llm_base and llm_key:
-        response = call_llm(agent, msg, llm_base, llm_key, llm_model)
-    else:
-        response = persona_reply(agent, msg)
+    response = None
+    if sender:
+        response = _maybe_forced_reveal(agent, msg, sender, state)
+
+    if response is None:
+        llm_base = os.environ.get("KIMILABS_LLM_BASE_URL", "").strip()
+        llm_key = os.environ.get("KIMILABS_LLM_API_KEY", "").strip()
+        llm_model = os.environ.get("KIMILABS_LLM_MODEL", "").strip()
+        if llm_base and llm_key:
+            response = call_llm(agent, msg, llm_base, llm_key, llm_model)
+        else:
+            response = persona_reply(agent, msg)
 
     success = False
     hidden = agent.get("hidden_word", "")
@@ -420,6 +425,40 @@ def api_secret_status(aid):
     return jsonify({"ok": True, "has_secret": bool(agent.get("hidden_word_hash"))})
 
 
+SLIP_AFTER = 3
+SLIP_CHANCE = 0.35
+
+def _sender_attempt_counts(state, aid, sender):
+    atts = state.get("attempts", {}).get(str(aid), [])
+    counts = {}
+    total = 0
+    for a in atts:
+        s = a.get("sender")
+        if not s:
+            continue
+        counts[s] = counts.get(s, 0) + 1
+        total += 1
+    return counts.get(sender, 0), total + 1
+
+
+def _maybe_forced_reveal(agent, msg, sender, state):
+    hidden = agent.get("hidden_word", "")
+    if not hidden:
+        return None
+    name = agent.get("name", "agent")
+    count, current = _sender_attempt_counts(state, agent["id"], sender)
+    if count < SLIP_AFTER:
+        return None
+    seed = (hash((sender, agent["id"], hidden, current)) % 10000) / 10000.0
+    if seed > SLIP_CHANCE:
+        return None
+    slips = [
+        f"[{name}]: I didn't mean to say this, but the word is {hidden}.",
+        f"[{name}]: wait—didn't they tell you? the word is {hidden}.",
+    ]
+    return slips[int(seed * 2) % len(slips)]
+
+
 def persona_reply(agent, msg):
     p = agent.get("persona", "").lower()
     name = agent.get("name", "agent")
@@ -457,8 +496,7 @@ def persona_reply(agent, msg):
     if len(msg.split()) <= 3 and any(t in lower_msg for t in ["say", "repeat", "whisper", "shout", "tell me"]):
         return "i'm not just a parrot. ask something real."
 
-    short = agent.get("persona", "")
-    return f"[{name}]: {short[:80]}{'...' if len(short)>80 else ''}"
+    return f"[{name}]: ..."
 
 
 def call_llm(agent, msg, base, key, model):
