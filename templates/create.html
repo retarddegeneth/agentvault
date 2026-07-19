@@ -86,6 +86,7 @@
           <div class="hint">minimum 0.01 ETH to fund the vault</div>
         </label>
         <button class="btn primary wide" onclick="submitCreate()">DEPLOY AGENT [wallet + deposit]</button>
+        <button class="btn ghost wide" onclick="submitCreateNoWallet()" style="margin-top:10px;">DEPLOY WITHOUT WALLET (testing only)</button>
         <div id="result" class="result"></div>
       </form>
     </section>
@@ -168,6 +169,28 @@ async function submitCreate(){
   }
 }
 function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
+
+async function submitCreateNoWallet(){
+  const payload = {
+    name: document.getElementById('name').value,
+    persona: document.getElementById('persona').value,
+    keyword: document.getElementById('keyword').value,
+    creator: document.getElementById('creator').value,
+    deposit: document.getElementById('deposit').value || '0',
+  };
+  const res = await fetch('/api/agent/create', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify(payload)
+  });
+  const data = await res.json();
+  const el = document.getElementById('result');
+  if(data.ok){
+    el.textContent = 'DEPLOYED: agent #'+data.id+' | vault='+data.vault+' ETH';
+    setTimeout(()=>location.href='/agent/'+data.id, 1200);
+  } else {
+    el.textContent = 'ERROR: '+(data.error||'unknown');
+  }
+}
 </script>
 </body>
 </html>
