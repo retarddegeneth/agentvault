@@ -1,4 +1,4 @@
-# KIKI Labs
+# kimilabs
 
 Prompt-injection vault game on Robinhood Chain + Virtuals Protocol.
 
@@ -39,9 +39,9 @@ python app.py
 
 | key | use |
 |---|---|
-| `KIKI_LLM_BASE_URL` | OpenAI-compatible base URL |
-| `KIKI_LLM_API_KEY` | API key |
-| `KIKI_LLM_MODEL` | model id |
+| `KIMILABS_LLM_BASE_URL` | OpenAI-compatible base URL |
+| `KIMILABS_LLM_API_KEY` | API key |
+| `KIMILABS_LLM_MODEL` | model id |
 
 ## CLI
 

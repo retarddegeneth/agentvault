@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""KIKI Labs CLI — manage agents from terminal."""
+"""kimilabs CLI — manage agents from terminal."""
 import sys, json, argparse
 from pathlib import Path
 from decimal import Decimal
@@ -59,7 +59,7 @@ def cmd_reset(args):
     save({"agents": [], "vaults": {}, "attempts": {}, "next_id": 1})
     print("reset complete")
 
-parser = argparse.ArgumentParser(description="KIKI Labs CLI")
+parser = argparse.ArgumentParser(description="kimilabs CLI")
 sub = parser.add_subparsers(dest="cmd")
 sub.add_parser("list", help="list agents")
 p_show = sub.add_parser("show", help="show agent details")

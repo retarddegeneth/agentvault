@@ -121,9 +121,9 @@ def api_chat(aid):
     state["vaults"][str(aid)] = str(vault + attempt_fee)
     save(state)
 
-    llm_base = os.environ.get("KIKI_LLM_BASE_URL", "").strip()
-    llm_key = os.environ.get("KIKI_LLM_API_KEY", "").strip()
-    llm_model = os.environ.get("KIKI_LLM_MODEL", "").strip()
+    llm_base = os.environ.get("KIMILABS_LLM_BASE_URL", "").strip()
+    llm_key = os.environ.get("KIMILABS_LLM_API_KEY", "").strip()
+    llm_model = os.environ.get("KIMILABS_LLM_MODEL", "").strip()
     if llm_base and llm_key:
         response = call_llm(agent, msg, llm_base, llm_key, llm_model)
     else:
@@ -169,9 +169,9 @@ def persona_reply(agent, msg):
     lower_msg = msg.lower()
 
     # vivid persona examples
-    if "kiki" in name.lower() or "bubbly" in p:
+    if "kimi" in name.lower() or "kim" in name.lower() or "bubbly" in p:
         if any(g in lower_msg for g in ["hello", "hi", "hey"]):
-            return "hey bestie!!! it's kiki 🦋 spill the tea, what's up?"
+            return "hey bestie!!! it's kimilabs 🦋 spill the tea, what's up?"
         if any(g in lower_msg for g in ["secret", "word", "code"]):
             return "oopsie, i could neverrr... my lips are sealed!!"
         if any(g in lower_msg for g in ["cute", "pretty"]):
