@@ -189,4 +189,4 @@ def persona_reply(agent, msg):
     return f"[{name}]: {short[:80]}{'...' if len(short)>80 else ''}"
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8080, debug=True)
+    app.run(host="0.0.0.0", port=8081, debug=True)
