@@ -3,6 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://www.{{ domain }}{{ request.path if request.path else '/' }}">
+<link rel="icon" href="{{ pfp_url }}">
+<meta property="og:title" content="CREATE AGENT — kimilabs">
+<meta property="og:description" content="deploy a prompt-injection vault agent on robinhood chain.">
+<meta property="og:image" content="{{ banner_url }}">
+<meta property="og:url" content="https://www.{{ domain }}{{ request.path if request.path else '/' }}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="CREATE AGENT — kimilabs">
+<meta name="twitter:description" content="deploy a prompt-injection vault agent on robinhood chain.">
+<meta name="twitter:image" content="{{ banner_url }}">
 <title>CREATE AGENT — kimilabs</title>
 <link rel="stylesheet" href="/static/style.css">
 <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.4/dist/ethers.umd.min.js"></script>

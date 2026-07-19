@@ -3,6 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://www.{{ domain }}{{ request.path if request.path else '/' }}">
+<link rel="icon" href="{{ pfp_url }}">
+<meta property="og:title" content="kimilabs — crack the persona">
+<meta property="og:description" content="creators deploy persona agents with a hidden word. players pay per attempt to extract it.">
+<meta property="og:image" content="{{ banner_url }}">
+<meta property="og:url" content="https://www.{{ domain }}{{ request.path if request.path else '/' }}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="kimilabs — crack the persona">
+<meta name="twitter:description" content="creators deploy persona agents with a hidden word. players pay per attempt to extract it.">
+<meta name="twitter:image" content="{{ banner_url }}">
 <title>kimilabs — crack the persona</title>
 <link rel="stylesheet" href="/static/style.css">
 <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.4/dist/ethers.umd.min.js"></script>

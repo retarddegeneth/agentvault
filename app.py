@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, redirect
 from pathlib import Path
 import json, hashlib, secrets, time, os
 from decimal import Decimal
@@ -193,9 +193,22 @@ TREASURY_ADDRESS = os.environ.get("KIMILABS_TREASURY_ADDRESS", "").strip()
 TREASURY_PK = os.environ.get("KIMILABS_TREASURY_PK", "").strip()
 RPC_URL = os.environ.get("KIMILABS_RPC_URL", "").strip()
 CHAIN_ID = int(os.environ.get("KIMILABS_CHAIN_ID", "4663"))
+DOMAIN = os.environ.get("KIMILABS_DOMAIN", "kimilabs.xyz").strip()
+BANNER_URL = os.environ.get("KIMILABS_BANNER_URL", "https://v3b.fal.media/files/b/0aa2dc27/-DN_ukVvx5_0fbPcAawyi_umKyp8Xq.png").strip()
+PFP_URL = os.environ.get("KIMILABS_PFP_URL", "https://v3b.fal.media/files/b/0aa2dc26/aVGxNaHqtrNy6d8OzT4Zd_eiMqnnQb.png").strip()
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", secrets.token_hex(16))
+
+@app.before_request
+def enforce_www():
+    if os.environ.get("KIMILABS_FORCE_WWW") != "true":
+        return None
+    host = request.host.split(":")[0].lower() if request.host else ""
+    if host == DOMAIN.lower():
+        url = request.url.replace("://" + host, "://www." + DOMAIN, 1)
+        return redirect(url, code=301)
+    return None
 
 
 @app.route("/")
@@ -209,17 +222,20 @@ def index():
         attempts=state.get("attempts", {}),
         treasury_address=TREASURY_ADDRESS,
         treasury_balance=treasury_balance,
+        domain=DOMAIN,
+        banner_url=BANNER_URL,
+        pfp_url=PFP_URL,
     )
 
 
 @app.route("/create")
 def create():
-    return render_template("create.html", treasury_address=TREASURY_ADDRESS)
+    return render_template("create.html", treasury_address=TREASURY_ADDRESS, domain=DOMAIN, banner_url=BANNER_URL, pfp_url=PFP_URL)
 
 
 @app.route("/docs")
 def docs():
-    return render_template("docs.html", treasury_address=TREASURY_ADDRESS)
+    return render_template("docs.html", treasury_address=TREASURY_ADDRESS, domain=DOMAIN, banner_url=BANNER_URL, pfp_url=PFP_URL)
 
 
 @app.route("/agent/<int:aid>")
@@ -236,6 +252,9 @@ def agent_page(aid):
         vault=vault,
         attempts=atts,
         treasury_address=TREASURY_ADDRESS,
+        domain=DOMAIN,
+        banner_url=BANNER_URL,
+        pfp_url=PFP_URL,
     )
 
 
