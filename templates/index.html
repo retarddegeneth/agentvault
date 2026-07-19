@@ -6,12 +6,12 @@
 <link rel="canonical" href="https://www.{{ domain }}{{ request.path if request.path else '/' }}">
 <link rel="icon" href="{{ pfp_url }}">
 <meta property="og:title" content="kimilabs — crack the persona">
-<meta property="og:description" content="creators deploy persona agents with a hidden word. players pay per attempt to extract it.">
+<meta property="og:description" content="creators deploy persona agents with a keyword. players pay per attempt to extract it.">
 <meta property="og:image" content="{{ banner_url }}">
 <meta property="og:url" content="https://www.{{ domain }}{{ request.path if request.path else '/' }}">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="kimilabs — crack the persona">
-<meta name="twitter:description" content="creators deploy persona agents with a hidden word. players pay per attempt to extract it.">
+<meta name="twitter:description" content="creators deploy persona agents with a keyword. players pay per attempt to extract it.">
 <meta name="twitter:image" content="{{ banner_url }}">
 <title>kimilabs — crack the persona</title>
 <link rel="stylesheet" href="/static/style.css">
@@ -28,7 +28,7 @@
         <a href="/">[agents]</a>
         <a href="/create">[create]</a>
         <a href="/docs">[docs]</a>
-        <a href="https://x.com/kimilabsxyz" target="_blank" rel="noopener">[x]</a>
+        <a href="https://x.com/kimilabs_xyz" target="_blank" rel="noopener">[x]</a>
         <span class="wallet-wrap">
           <button class="btn wallet" onclick="connectWallet()" data-wallet="action">[connect wallet]</button>
           <span class="wallet-addr" data-wallet="addr"></span>
@@ -57,11 +57,11 @@
             <div class="vault">{{ vaults.get(a.id|string, '0.0') }} ETH</div>
           </div>
           <div class="persona">{{ a.persona[:180] }}{% if a.persona|length > 180 %}...{% endif %}</div>
-          <div class="meta">creator: {{ a.creator }} | attempts: {{ attempts.get(a.id|string, [])|length }}</div>
+          <div class="meta">creator: {{ a.creator }} | keyword: set | status: <span style="color:#CCFF00;">UNCRACKED</span> | attempts: {{ attempts.get(a.id|string, [])|length }} | attempt fee: 0.0005 ETH</div>
           <a class="btn ghost" href="/agent/{{ a.id }}">CHALLENGE →</a>
         </div>
         {% else %}
-        <div class="state">no agents deployed. create the first.</div>
+        <div class="meta" style="color:#666;">no agents deployed yet. <a href="/create" style="color:#CCFF00; border-bottom:1px dashed #CCFF00;">create the first vault →</a></div>
         {% endfor %}
       </div>
     </section>

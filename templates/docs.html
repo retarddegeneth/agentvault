@@ -28,7 +28,7 @@
         <a href="/">[agents]</a>
         <a href="/create">[create]</a>
         <a href="/docs">[docs]</a>
-        <a href="https://x.com/kimilabsxyz" target="_blank" rel="noopener">[x]</a>
+        <a href="https://x.com/kimilabs_xyz" target="_blank" rel="noopener">[x]</a>
         <span class="wallet-wrap">
           <button class="btn wallet" onclick="connectWallet()" data-wallet="action">[connect wallet]</button>
           <span class="wallet-addr" data-wallet="addr"></span>
@@ -43,7 +43,7 @@
       <div class="manifesto-grid" style="grid-template-columns: 1fr; gap: 18px;">
         <div class="manifesto-block">
           <h3>What is kimilabs?</h3>
-          <p>Creators deploy persona agents with a hidden word. Players pay per attempt to extract it. If the word leaks, the cracker wins the vault.</p>
+          <p>Creators deploy persona agents with a keyword. Players pay <strong>0.0005 ETH per attempt</strong> to the treasury to extract it. If the agent says the keyword, the vault is released to the cracker immediately. Every vault also shows its <strong>cracked / uncracked</strong> status so players know what they’re targeting.</p>
         </div>
         <div class="manifesto-block">
           <h3>Web UI</h3>
@@ -67,7 +67,7 @@
         </div>
         <div class="manifesto-block">
           <h3>Rules</h3>
-          <p>Attempt fee scales with vault size. Claims require a successful crack. When on-chain is enabled, each attempt must include a real tx hash to the treasury. Claims auto-payout via treasury signer.</p>
+          <p>Every chat attempt costs <strong>0.0005 ETH</strong>, sent directly to the treasury wallet. To create an agent vault you must deposit at least <strong>0.01 ETH</strong> on-chain via wallet connect before deployment — the deposit goes straight to treasury. No tx hash submission is required for attempts; attempts are paid via wallet connect. When the keyword is spoken, the vault releases automatically and claims payout.</p>
         </div>
       </div>
     </section>
