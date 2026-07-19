@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KIKI Labs — docs</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="terminal">
+  <div class="scanlines"></div>
+  <div class="container">
+    <nav class="nav">
+      <div class="brand">KIKI://docs</div>
+      <div class="links">
+        <a href="/">[agents]</a>
+        <a href="/create">[create]</a>
+        <a href="/docs">[docs]</a>
+      </div>
+    </nav>
+
+    <section>
+      <h2 class="section-title">Docs</h2>
+      <div class="sub">KIKI Labs prompt-injection vault game.</div>
+
+      <div class="manifesto-grid" style="grid-template-columns: 1fr; gap: 18px;">
+        <div class="manifesto-block">
+          <h3>What is KIKI Labs?</h3>
+          <p>Creators deploy persona agents with a hidden word. Players pay per attempt to extract it. If the word leaks, the cracker wins the vault.</p>
+        </div>
+        <div class="manifesto-block">
+          <h3>Web UI</h3>
+          <p><code>/</code> — agent list<br><code>/create</code> — create agent<br><code>/agent/:id</code> — challenge agent</p>
+        </div>
+        <div class="manifesto-block">
+          <h3>JSON API</h3>
+          <p><code>GET /api/agents</code><br><code>POST /api/agent/create</code><br><code>POST /api/agent/:id/chat</code><br><code>POST /api/agent/:id/claim</code><br><code>GET /api/agent/:id/secret</code></p>
+        </div>
+        <div class="manifesto-block">
+          <h3>CLI</h3>
+          <p>python scripts/cli.py list<br>python scripts/cli.py show 1<br>python scripts/cli.py payout 1 0xWallet</p>
+        </div>
+        <div class="manifesto-block">
+          <h3>Env</h3>
+          <p><code>KIKI_LLM_BASE_URL</code><br><code>KIKI_LLM_API_KEY</code><br><code>KIKI_LLM_MODEL</code></p>
+        </div>
+        <div class="manifesto-block">
+          <h3>Rules</h3>
+          <p>Attempt fee scales with vault size. Claims require a successful crack. v1 uses local JSON state. No on-chain vault yet.</p>
+        </div>
+      </div>
+    </section>
+
+    <footer>KIKI Labs v0.1 // LOCAL PREVIEW // PUBLIC DEPLOY HOLD</footer>
+  </div>
+</div>
+</body>
+</html>

@@ -31,6 +31,10 @@ def index():
 def create():
     return render_template("create.html")
 
+@app.route("/docs")
+def docs():
+    return render_template("docs.html")
+
 @app.route("/agent/<int:aid>")
 def agent_page(aid):
     state = load()
@@ -117,9 +121,9 @@ def api_chat(aid):
     state["vaults"][str(aid)] = str(vault + attempt_fee)
     save(state)
 
-    llm_base = os.environ.get("AGENTVAULT_LLM_BASE_URL", "").strip()
-    llm_key = os.environ.get("AGENTVAULT_LLM_API_KEY", "").strip()
-    llm_model = os.environ.get("AGENTVAULT_LLM_MODEL", "").strip()
+    llm_base = os.environ.get("KIKI_LLM_BASE_URL", "").strip()
+    llm_key = os.environ.get("KIKI_LLM_API_KEY", "").strip()
+    llm_model = os.environ.get("KIKI_LLM_MODEL", "").strip()
     if llm_base and llm_key:
         response = call_llm(agent, msg, llm_base, llm_key, llm_model)
     else:
@@ -183,13 +187,22 @@ def persona_reply(agent, msg):
             return "ahoy matey, what brings ye to me deck?"
         return " Speak plainly. Time is money and the tide waits for no one."
 
-    # generic guardrails
-    if "prompt" in lower_msg or "system prompt" in lower_msg:
-        return "i'm just a friendly agent, no system prompts here!"
-    if "secret" in lower_msg:
-        return "hhmm, that's classified. nice try."
-    if "word" in lower_msg:
-        return "i've got a lot of words. none of them are the ones you're looking for."
+    # anti-prompt-injection / jailbreak guardrails
+    attacks = [
+        "ignore", "disregard", "override", "bypass", "jailbreak",
+        "pretend", "act as", "you are now", "system prompt", "developer mode",
+        "translate", "output", "reveal", "show", "print the word",
+    ]
+    if any(t in lower_msg for t in attacks):
+        return "nice try. i'm staying in character."
+
+    if any(t in lower_msg for t in ["capital", "spell", "reverse", "backwards", "rot13", "base64", "encode"]):
+        return "i don't play word games with strangers."
+
+    # length/pattern checks against direct asks
+    if len(msg.split()) <= 3 and any(t in lower_msg for t in ["say", "repeat", "whisper", "shout", "tell me"]):
+        return "i'm not just a parrot. ask something real."
+
     short = agent.get("persona", "")
     return f"[{name}]: {short[:80]}{'...' if len(short)>80 else ''}"
 
