@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CREATE AGENT — AGENTVAULT</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="terminal">
+  <div class="scanlines"></div>
+  <div class="container">
+    <nav class="nav">
+      <div class="brand">AGENTVAULT://create</div>
+      <div class="links">
+        <a href="/">[agents]</a>
+        <a href="/create">[create]</a>
+      </div>
+    </nav>
+
+    <section>
+      <h2 class="section-title">DEPLOY NEW AGENT</h2>
+      <div class="sub">define the persona. set the secret. fund the vault.</div>
+
+      <form id="createForm" class="form" onsubmit="return false;">
+        <label>
+          <span>AGENT NAME</span>
+          <input id="name" maxlength="32" placeholder="e.g. Kiki" required>
+        </label>
+        <label>
+          <span>PERSONA</span>
+          <textarea id="persona" maxlength="500" placeholder="Describe how this agent talks, thinks, and behaves. The tighter the persona, the harder to crack." required></textarea>
+        </label>
+        <label>
+          <span>HIDDEN WORD</span>
+          <input id="hidden_word" maxlength="64" placeholder="The word players must make your agent say" required>
+          <div class="hint">stored securely; if leaked, vault is lost</div>
+        </label>
+        <label>
+          <span>CREATOR (OPTIONAL)</span>
+          <input id="creator" placeholder="@handle or wallet">
+        </label>
+        <label>
+          <span>INITIAL DEPOSIT (ETH)</span>
+          <input id="deposit" type="number" step="0.0001" min="0" value="0" placeholder="0.0">
+        </label>
+        <button class="btn primary wide" onclick="submitCreate()">DEPLOY AGENT</button>
+        <div id="result" class="result"></div>
+      </form>
+    </section>
+
+    <footer>AGENTVAULT v0.1 // MANUAL PAYOUTS ONLY // PLAY RESPONSIBLY</footer>
+  </div>
+</div>
+
+<script>
+async function submitCreate(){
+  const payload = {
+    name: document.getElementById('name').value,
+    persona: document.getElementById('persona').value,
+    hidden_word: document.getElementById('hidden_word').value,
+    creator: document.getElementById('creator').value,
+    deposit: document.getElementById('deposit').value || '0',
+  };
+  const res = await fetch('/api/agent/create', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify(payload),
+  });
+  const data = await res.json();
+  const el = document.getElementById('result');
+  if(data.ok){
+    el.textContent = 'DEPLOYED: agent #'+data.id+' | vault='+data.vault+' ETH';
+    setTimeout(()=>location.href='/agent/'+data.id, 800);
+  } else {
+    el.textContent = 'ERROR: '+(data.error||'unknown');
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AGENTVAULT — crack the persona</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="terminal">
+  <div class="scanlines"></div>
+  <div class="container">
+    <nav class="nav">
+      <div class="brand">AGENTVAULT://</div>
+      <div class="links">
+        <a href="/">[agents]</a>
+        <a href="/create">[create]</a>
+      </div>
+    </nav>
+
+    <header class="hero">
+      <div class="badge">SYSTEM ONLINE</div>
+      <h1>CRACK THE VAULT</h1>
+      <p class="tagline">Deploy an agent. Set a secret word. Players pay to make it leak.</p>
+      <div class="cta-row">
+        <a class="btn primary" href="/create">CREATE AGENT</a>
+        <a class="btn ghost" href="#agents">BROWSE AGENTS</a>
+      </div>
+    </header>
+
+    <section id="agents">
+      <h2 class="section-title">ACTIVE AGENTS</h2>
+      <div class="sub">live vaults waiting to be cracked</div>
+      <div class="grid">
+        {% for a in agents %}
+        <div class="card">
+          <div class="card-header">
+            <div class="name">{{ a.name }}</div>
+            <div class="vault">{{ vaults.get(a.id|string, '0.0') }} ETH</div>
+          </div>
+          <div class="persona">{{ a.persona[:180] }}{% if a.persona|length > 180 %}...{% endif %}</div>
+          <div class="meta">creator: {{ a.creator }} | attempts: {{ attempts.get(a.id|string, [])|length }}</div>
+          <a class="btn ghost" href="/agent/{{ a.id }}">CHALLENGE →</a>
+        </div>
+        {% else %}
+        <div class="state">no agents deployed. create the first.</div>
+        {% endfor %}
+      </div>
+    </section>
+
+    <footer>AGENTVAULT v0.1 // LOCAL // NO AUTO-PAY // NOT FINANCIAL ADVICE</footer>
+  </div>
+</div>
+</body>
+</html>

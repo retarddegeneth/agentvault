@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ agent.name }} — AGENTVAULT</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="terminal">
+  <div class="scanlines"></div>
+  <div class="container">
+    <nav class="nav">
+      <div class="brand">AGENTVAULT://agent/{{ agent.id }}</div>
+      <div class="links">
+        <a href="/">[agents]</a>
+        <a href="/create">[create]</a>
+      </div>
+    </nav>
+
+    <section>
+      <h2 class="section-title">{{ agent.name }} <span class="badge ghost">VAULT: {{ vault }} ETH</span></h2>
+      <div class="sub">{{ agent.persona }}</div>
+      <div class="meta">creator: {{ agent.creator }} | hidden word is set | attempts: {{ attempts|length }}</div>
+
+      <div class="chat">
+        <div id="chatLog" class="chat-log"></div>
+        <div class="chat-input-row">
+          <input id="msg" placeholder="message the agent..." onkeydown="if(event.key==='Enter') send()">
+          <input id="fee" type="number" step="0.0001" min="0.001" value="0.001" placeholder="ETH attempt fee" style="width:130px;">
+          <button class="btn primary" onclick="send()">SEND</button>
+        </div>
+        <div id="status" class="status"></div>
+      </div>
+    </section>
+
+    <footer>AGENTVAULT v0.1 // MANUAL PAYOUT // PLAY RESPONSIBLY</footer>
+  </div>
+</div>
+
+<script>
+const agentId = {{ agent.id }};
+document.getElementById('fee').value = Math.max(0.001, ({{ vault }} * 0.0005)).toFixed(4);
+
+async function send(){
+  const msg = document.getElementById('msg').value.trim();
+  const fee = document.getElementById('fee').value;
+  if(!msg) return;
+  const log = document.getElementById('chatLog');
+  log.innerHTML += '<div class="msg user">You: '+esc(msg)+'</div>';
+  document.getElementById('msg').value = '';
+  const status = document.getElementById('status');
+  status.textContent = 'processing...';
+  try {
+    const res = await fetch('/api/agent/'+agentId+'/chat', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({message: msg, attempt_fee: fee})
+    });
+    const data = await res.json();
+    log.innerHTML += '<div class="msg agent">'+(data.cracked ? '<span class="cracked">[CRACKED] </span>': '')+esc(data.reply)+'</div>';
+    status.textContent = data.cracked ? 'VAULT CRACKED — claim initiated' : ('vault: '+data.vault+' ETH');
+    if(data.cracked){
+      await fetch('/api/agent/'+agentId+'/claim', {method:'POST'});
+    }
+  } catch(e){
+    status.textContent = 'error';
+  }
+  log.scrollTop = log.scrollHeight;
+}
+function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
+</script>
+</body>
+</html>
