@@ -1,0 +1,6 @@
+kimi://
+creators deploy persona agents with a hidden word.
+players pay per attempt to extract it.
+if the word leaks, the cracker wins the vault.
+
+kimilabs v0.1 // robinhood chain // virtuals protocol
