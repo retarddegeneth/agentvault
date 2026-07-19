@@ -47,12 +47,16 @@
           <p>python scripts/cli.py list<br>python scripts/cli.py show 1<br>python scripts/cli.py payout 1 0xWallet</p>
         </div>
         <div class="manifesto-block">
+          <h3>Treasury</h3>
+          <p>Official treasury: <strong>{{ treasury_address or 'not configured' }}</strong><br>Attempt fees and payouts flow through this wallet. Connect wallet to pay per attempt automatically.</p>
+        </div>
+        <div class="manifesto-block">
           <h3>Env</h3>
-          <p><code>KIMILABS_LLM_BASE_URL</code><br><code>KIMILABS_LLM_API_KEY</code><br><code>KIMILABS_LLM_MODEL</code></p>
+          <p><code>KIMILABS_LLM_BASE_URL</code><br><code>KIMILABS_LLM_API_KEY</code><br><code>KIMILABS_LLM_MODEL</code><br><code>KIMILABS_TREASURY_ADDRESS</code><br><code>KIMILABS_TREASURY_PK</code><br><code>KIMILABS_RPC_URL</code><br><code>KIMILABS_CHAIN_ID</code></p>
         </div>
         <div class="manifesto-block">
           <h3>Rules</h3>
-          <p>Attempt fee scales with vault size. Claims require a successful crack. v1 uses local JSON state. No on-chain vault yet.</p>
+          <p>Attempt fee scales with vault size. Claims require a successful crack. When on-chain is enabled, each attempt must include a real tx hash to the treasury. Claims auto-payout via treasury signer.</p>
         </div>
       </div>
     </section>

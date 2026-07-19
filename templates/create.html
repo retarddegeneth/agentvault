@@ -30,6 +30,12 @@
       <div class="sub">define the persona. set the secret. fund the vault.</div>
 
       <form id="createForm" class="form" onsubmit="return false;">
+        {% if treasury_address %}
+        <label>
+          <span>TREASURY (agent vault address)</span>
+          <div style="font-family: monospace; word-break: break-all; color: #4ade80;">{{ treasury_address }}</div>
+        </label>
+        {% endif %}
         <label>
           <span>AGENT NAME</span>
           <input id="name" maxlength="32" placeholder="e.g. Kiki" required>

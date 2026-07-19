@@ -28,13 +28,20 @@
     <section>
       <h2 class="section-title">{{ agent.name }} <span class="badge ghost">VAULT: {{ vault }} ETH</span></h2>
       <div class="sub">{{ agent.persona }}</div>
+      {% if treasury_address %}
+      <div class="meta">treasury: <span style="font-family:monospace;color:#4ade80;">{{ treasury_address }}</span></div>
+      {% endif %}
       <div class="meta">creator: {{ agent.creator }} | hidden word is set | attempts: {{ attempts|length }}</div>
 
       <div class="chat">
         <div id="chatLog" class="chat-log"></div>
         <div class="chat-input-row">
           <input id="msg" placeholder="message the agent..." onkeydown="if(event.key==='Enter') send()">
-          <input id="fee" type="number" step="0.0001" min="0.001" value="0.001" placeholder="ETH attempt fee" style="width:130px;">
+          {% if treasury_address %}
+          <input id="tx_hash" placeholder="tx hash after on-chain attempt" style="width:220px;">
+          {% else %}
+          <input id="fee" type="number" step="0.0001" min="0.001" value="{{ '%.4f'|format(max(0.001, vault|float * 0.0005)) }}" placeholder="ETH attempt fee" style="width:130px;">
+          {% endif %}
           <button class="btn primary" onclick="send()">SEND</button>
         </div>
         <div id="status" class="status"></div>
@@ -51,7 +58,6 @@ document.getElementById('fee').value = Math.max(0.001, ({{ vault }} * 0.0005)).t
 
 async function send(){
   const msg = document.getElementById('msg').value.trim();
-  const fee = document.getElementById('fee').value;
   if(!msg) return;
   const log = document.getElementById('chatLog');
   log.innerHTML += '<div class="msg user">You: '+esc(msg)+'</div>';
@@ -60,9 +66,19 @@ async function send(){
   status.textContent = 'processing...';
   try {
     const sender = (typeof connected === 'string') ? connected : null;
+    const payload = {message: msg, sender: sender};
+    const txHashEl = document.getElementById('tx_hash');
+    const feeEl = document.getElementById('fee');
+    if (txHashEl) {
+      payload.tx_hash = txHashEl.value.trim();
+      payload.attempt_fee = 0;
+    }
+    if (feeEl) {
+      payload.attempt_fee = feeEl.value;
+    }
     const res = await fetch('/api/agent/'+agentId+'/chat', {
       method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({message: msg, attempt_fee: fee, sender: sender})
+      body: JSON.stringify(payload)
     });
     const data = await res.json();
     log.innerHTML += '<div class="msg agent">'+(data.cracked ? '<span class="cracked">[CRACKED] </span>': '')+esc(data.reply)+'</div>';
